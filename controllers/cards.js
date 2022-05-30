@@ -73,10 +73,16 @@ const dislikeCard = (req, res) => {
     { new: true },
   ).then((card) => {
     if (card === null) {
-      return res.status(400).send({ message: 'Не корректный id карточки' });
+      return res.status(404).send({ message: 'Карточки с таким id не найдено' });
     }
     return res.status(200).send(card);
-  });
+  })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Не корректный id карточки' });
+      }
+      return res.status(500).send({ message: 'Серверная ошибка' });
+    });
 };
 
 module.exports = {
