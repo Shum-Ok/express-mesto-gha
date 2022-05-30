@@ -53,7 +53,7 @@ const likeCard = (req, res) => {
     { new: true },
   ).then((card) => {
     if (card === null) {
-      return res.status(400).send({ message: 'Карточки с таким id не найдено' });
+      return res.status(404).send({ message: 'Карточки с таким id не найдено' });
     }
     return res.status(200).send(card);
   })
