@@ -20,5 +20,8 @@ app.use((req, res, next) => {
 });
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
+app.use((_, res) => {
+  res.status(404).send({ message: 'Страница с таким url не найдена' });
+});
 
 app.listen(PORT);

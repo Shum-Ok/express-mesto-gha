@@ -1,6 +1,6 @@
 const User = require('../models/user');
 
-// Создать юзера
+// Создать юзера POST
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
@@ -18,7 +18,7 @@ const createUser = (req, res) => {
     });
 };
 
-// Вернуть одного юзера
+// Вернуть одного юзера GET
 const getUser = (req, res) => {
   const { userId } = req.params;
 
@@ -31,21 +31,21 @@ const getUser = (req, res) => {
       return res.status(200).send(user);
     })
     .catch((err) => {
-      if (err.kind === 'ObjectId') {
+      if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'Не корректный ID пользователя' });
       }
       return res.status(500).send({ message: 'Серверная ошибка' });
     });
 };
 
-// Вернуть всех юзеров
+// Вернуть всех юзеров GET
 const getUsers = (_, res) => {
   User.find({})
     .then((users) => res.status(200).send(users))
     .catch(() => res.status(500).send({ message: 'Серверная ошибка' }));
 };
 
-// Обновить профиль Юзера
+// Обновить профиль Юзера PATCH
 const patchUser = (req, res) => {
   const { name, about } = req.body;
 
@@ -58,14 +58,14 @@ const patchUser = (req, res) => {
       return res.status(200).send(user);
     })
     .catch((err) => {
-      if (err.kind === 'ObjectId') {
+      if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'Не корректный ID пользователя' });
       }
       return res.status(500).send({ message: 'Серверная ошибка' });
     });
 };
 
-// Обновить аватар Юзера
+// Обновить аватар Юзера PATCH
 const patchUserAvatar = (req, res) => {
   const { avatar } = req.body;
 
@@ -78,7 +78,7 @@ const patchUserAvatar = (req, res) => {
       return res.status(200).send(user);
     })
     .catch((err) => {
-      if (err.kind === 'ObjectId') {
+      if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'Не корректный ID пользователя' });
       }
       return res.status(500).send({ message: 'Серверная ошибка' });
