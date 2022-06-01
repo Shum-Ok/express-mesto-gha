@@ -5,16 +5,18 @@ const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   if (!name || !about) {
-    return res.status(400).send({ message: 'Одно из полей не заполнены' });
+    res.status(400).send({ message: 'Одно из полей не заполнены' });
+    return;
   }
 
-  return User.create({ name, about, avatar })
+  User.create({ name, about, avatar })
     .then((user) => res.status(201).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Одно из полей не заполнены корректно' });
+        res.status(400).send({ message: 'Одно из полей не заполнены корректно' });
+        return;
       }
-      return res.status(500).send({ message: 'Серверная ошибка' });
+      res.status(500).send({ message: 'Серверная ошибка' });
     });
 };
 
@@ -25,16 +27,17 @@ const getUser = (req, res) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: 'Юзер не найден' });
+        res.status(404).send({ message: 'Юзер не найден' });
+        return;
       }
-
-      return res.status(200).send(user);
+      res.status(200).send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Не корректный ID пользователя' });
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Не корректный ID пользователя' });
+        return;
       }
-      return res.status(500).send({ message: 'Серверная ошибка' });
+      res.status(500).send({ message: 'Серверная ошибка' });
     });
 };
 
@@ -52,16 +55,18 @@ const patchUser = (req, res) => {
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: 'Юзер с таким ID не найден' });
+        res.status(404).send({ message: 'Юзер с таким ID не найден' });
+        return;
       }
 
-      return res.status(200).send(user);
+      res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Не корректный ID пользователя' });
+        res.status(400).send({ message: 'Не корректный ID пользователя' });
+        return;
       }
-      return res.status(500).send({ message: 'Серверная ошибка' });
+      res.status(500).send({ message: 'Серверная ошибка' });
     });
 };
 
@@ -72,16 +77,18 @@ const patchUserAvatar = (req, res) => {
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: 'Юзер с таким ID не найден' });
+        res.status(404).send({ message: 'Юзер с таким ID не найден' });
+        return;
       }
 
-      return res.status(200).send(user);
+      res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Не корректный ID пользователя' });
+        res.status(400).send({ message: 'Не корректный ID пользователя' });
+        return;
       }
-      return res.status(500).send({ message: 'Серверная ошибка' });
+      res.status(500).send({ message: 'Серверная ошибка' });
     });
 };
 
