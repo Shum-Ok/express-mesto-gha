@@ -4,11 +4,6 @@ const User = require('../models/user');
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
-  if (!name || !about) {
-    res.status(400).send({ message: 'Одно из полей не заполнены' });
-    return;
-  }
-
   User.create({ name, about, avatar })
     .then((user) => res.status(201).send(user))
     .catch((err) => {

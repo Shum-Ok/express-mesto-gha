@@ -5,11 +5,6 @@ const createCard = (req, res) => {
   const { name, link } = req.body;
   const owner = req.user._id;
 
-  if (!name || !link) {
-    res.status(400).send({ message: 'Одно из полей не заполнены' });
-    return;
-  }
-
   Card.create({ name, link, owner })
     .then((card) => res.status(201).send(card))
     .catch((err) => {
