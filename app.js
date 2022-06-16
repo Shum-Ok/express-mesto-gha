@@ -8,6 +8,8 @@ const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const error = require('./middlewares/error');
 
+const NotFoundError = require('./errors/NotFoundError');
+
 const app = express();
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
@@ -36,8 +38,9 @@ app.use(auth); // авторизация
 
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
-app.use('/', (_, res) => {
-  res.status(404).send({ message: 'Страница с таким url не найдена' });
+
+app.use('/', (_, res, next) => {
+  next(new NotFoundError('Такой URL не найден'));
 });
 
 app.use(errors()); // обработчик ошибок celebrate

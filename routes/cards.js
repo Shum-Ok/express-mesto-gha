@@ -9,6 +9,9 @@ const {
   dislikeCard,
 } = require('../controllers/cards');
 
+// Получить все карточки
+router.get('/', getCards);
+
 // Создать карточку
 router.post('/', celebrate({
   body: Joi.object().keys({
@@ -16,9 +19,6 @@ router.post('/', celebrate({
     link: Joi.string().required().uri(),
   }),
 }), createCard);
-
-// Получить все карточки
-router.get('/', getCards);
 
 // Удалить карточку
 router.delete('/:cardId', deleteCard);

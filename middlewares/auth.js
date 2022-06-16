@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 // errors
 const UnauthorizedError = require('../errors/UnauthorizedError'); // 401
+const NotFoundError = require('../errors/NotFoundError'); // 404
 
 module.exports = (req, res, next) => {
   // Достаем авторизованный заголовок
@@ -23,7 +24,7 @@ module.exports = (req, res, next) => {
   } catch (err) {
     // отправляем ошибку если не получилось
     // return res.status(401).send({ message: 'Необходима авторизоваться' });
-    return next(new UnauthorizedError('Необходима авторизоваться'));
+    next(new UnauthorizedError('Необходима авторизоваться'));
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса
