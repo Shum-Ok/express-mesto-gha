@@ -45,8 +45,8 @@ const login = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' }); // создали токен
       res.status(200).send({ token });
     })
-    .catch(() => {
-      next(new UnauthorizedError('Неверные логин или пароль'));
+    .catch((err) => {
+      next(err); // new UnauthorizedError('Неверные логин или пароль')
     });
 };
 
