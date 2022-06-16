@@ -32,8 +32,8 @@ const createUser = (req, res, next) => {
         about,
         avatar,
       })
-        .then(() => {
-          res.status(200).send({ message: 'Пользователь создан' });
+        .then((user) => {
+          res.status(200).send(user);
         })
         .catch((err) => {
           if (err.code === MONGO_DUPLICATE_KEY_CODE) {
