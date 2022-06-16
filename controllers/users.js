@@ -15,24 +15,33 @@ const saltRounds = 10;
 
 // Регистрация пользователя
 const createUser = (req, res, next) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    res.status(400).send({ message: 'Ошибка, не все поля введены' });
-    return;
-  }
+  const {
+    email,
+    password,
+    name,
+    about,
+    avatar,
+  } = req.body;
 
-  bcrypt.hash(password, saltRounds).then((hash) => {
-    User.create({ email, password: hash })
-      .then(() => {
-        res.status(200).send({ message: 'Пользователь создан' });
+  return bcrypt.hash(password, saltRounds)
+    .then((hash) => {
+      User.create({
+        email,
+        password: hash,
+        name,
+        about,
+        avatar,
       })
-      .catch((err) => {
-        if (err.code === MONGO_DUPLICATE_KEY_CODE) {
-          next(new ConflictError(`Емайл ${err.keyValue.email} уже занят`));
-        }
-        next(err);
-      });
-  });
+        .then(() => {
+          res.status(200).send({ message: 'Пользователь создан' });
+        })
+        .catch((err) => {
+          if (err.code === MONGO_DUPLICATE_KEY_CODE) {
+            next(new ConflictError(`Емайл ${err.keyValue.email} уже занят`));
+          }
+          next(err);
+        });
+    });
 };
 
 // авторизация пользователя
@@ -45,8 +54,8 @@ const login = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' }); // создали токен
       res.status(200).send({ token });
     })
-    .catch((err) => {
-      next(err); // new UnauthorizedError('Неверные логин или пароль')
+    .catch(() => {
+      next(new UnauthorizedError('Неверные логин или пароль'));
     });
 };
 

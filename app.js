@@ -8,6 +8,8 @@ const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const error = require('./middlewares/error');
 
+const { regExpUrl } = require('./utils/const');
+
 const NotFoundError = require('./errors/NotFoundError');
 
 const app = express();
@@ -30,7 +32,7 @@ app.post('/signup', celebrate({
     password: Joi.string().required(),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().uri(),
+    avatar: Joi.string().pattern(regExpUrl),
   }),
 }), createUser);
 
