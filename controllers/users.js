@@ -32,8 +32,15 @@ const createUser = (req, res, next) => {
         about,
         avatar,
       })
-        .then((user) => {
-          res.status(200).send(user);
+        .then(() => {
+          res.status(200).send({
+            data: {
+              email,
+              name,
+              about,
+              avatar,
+            },
+          });
         })
         .catch((err) => {
           if (err.code === MONGO_DUPLICATE_KEY_CODE) {
