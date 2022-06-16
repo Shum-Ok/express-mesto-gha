@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
-    validate: [isURL, 'Ошибка валидации']б
+    validate: [isURL, 'Ошибка валидации'],
   },
   email: {
     type: String,
