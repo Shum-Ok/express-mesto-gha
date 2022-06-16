@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
+
 const {
   createCard,
   getCards,
@@ -8,7 +10,12 @@ const {
 } = require('../controllers/cards');
 
 // Создать карточку
-router.post('/', createCard);
+router.post('/', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30),
+    link: Joi.string().required().uri(),
+  }),
+}), createCard);
 
 // Получить все карточки
 router.get('/', getCards);
