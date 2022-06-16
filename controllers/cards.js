@@ -13,7 +13,8 @@ const createCard = (req, res, next) => {
   Card.create({ name, link, owner })
     .then((card) => res.status(201).send(card))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      console.log(err)
+      if (err.name === ('ValidationError' || 'Bad Request')) {
         // res.status(400).send({ message: 'Одно из полей не заполнены корректно' });
         return next(new ValidationError('Одно из полей не заполнены корректно'));
       }
