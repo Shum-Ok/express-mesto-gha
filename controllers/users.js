@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
+const { JWT_SECRET, NODE_ENV } = process.env;
+
 // errors
 const ValidationError = require('../errors/ValidationError'); // 400
 const UnauthorizedError = require('../errors/UnauthorizedError'); // 401
@@ -34,12 +36,10 @@ const createUser = (req, res, next) => {
       })
         .then(() => {
           res.status(200).send({
-            data: {
-              email,
-              name,
-              about,
-              avatar,
-            },
+            email,
+            name,
+            about,
+            avatar,
           });
         })
         .catch((err) => {
@@ -58,7 +58,7 @@ const login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       // аутентификация успешна
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' }); // создали токен
+      const token = jwt.sign({ _id: user._id }, `${NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret'}`, { expiresIn: '7d' }); // создали токен
       res.status(200).send({ token });
     })
     .catch(() => {
